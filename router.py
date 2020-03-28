@@ -26,10 +26,29 @@ def pickMac(activeMac):
 
     cookies = {"C0":"21232f297a57a5a743894a0e4a801fc3","C1":"5f4dcc3b5aa765d61d8327deb882cf99"}
 
+    payload = {'tipsFlag':'0', 'timevalue':'0','Login_Name':'admin','uiWebLoginhiddenUsername':'21232f297a57a5a743894a0e4a801fc3','uiWebLoginhiddenPassword':'5f4dcc3b5aa765d61d8327deb882cf99'}
+    loginHeaders={"POST":"/Forms/login_security_1 HTTP/1.1",
+                "Host":"192.168.3.47",
+                "User-Agent":"Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101 Firefox/68.0",
+                "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                "Accept-Language":"en-US,en;q=0.5",
+                "Accept-Encoding":"gzip, deflate",
+                "Referer":"http://192.168.3.47/login_security.htm",
+                "Content-Type":"application/x-www-form-urlencoded",
+                "Content-Length":"196",
+                "Connection":"close",
+                "Upgrade-Insecure-Requests":"1"}
+
+    loginUrl = 'http://192.168.3.47/Forms/login_security_1'
+
+
 
     while(True):
         try:
-            r = requests.get("http://192.168.3.47/status/status_deviceinfo.htm",cookies=cookies,headers=headers)
+            with requests.Session() as s:
+                s.post(loginUrl,data=payload,headers=loginHeaders, allow_redirects=True)
+
+                r = s.get("http://192.168.3.47/status/status_deviceinfo.htm",cookies=cookies,headers=headers)
 
             soup = BeautifulSoup(r.text,'html.parser')
             soup = soup.find_all('table')[2]
@@ -56,29 +75,29 @@ def pickMac(activeMac):
     
 
     
-def login():
-    payload = {'tipsFlag':'0', 'timevalue':'0','Login_Name':'admin','uiWebLoginhiddenUsername':'21232f297a57a5a743894a0e4a801fc3','uiWebLoginhiddenPassword':'5f4dcc3b5aa765d61d8327deb882cf99'}
-    headers={"POST":"/Forms/login_security_1 HTTP/1.1",
-                "Host":"192.168.3.47",
-                "User-Agent":"Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101 Firefox/68.0",
-                "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-                "Accept-Language":"en-US,en;q=0.5",
-                "Accept-Encoding":"gzip, deflate",
-                "Referer":"http://192.168.3.47/login_security.htm",
-                "Content-Type":"application/x-www-form-urlencoded",
-                "Content-Length":"196",
-                "Connection":"close",
-                "Upgrade-Insecure-Requests":"1"}
+# def login():
+#     payload = {'tipsFlag':'0', 'timevalue':'0','Login_Name':'admin','uiWebLoginhiddenUsername':'21232f297a57a5a743894a0e4a801fc3','uiWebLoginhiddenPassword':'5f4dcc3b5aa765d61d8327deb882cf99'}
+#     headers={"POST":"/Forms/login_security_1 HTTP/1.1",
+#                 "Host":"192.168.3.47",
+#                 "User-Agent":"Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101 Firefox/68.0",
+#                 "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+#                 "Accept-Language":"en-US,en;q=0.5",
+#                 "Accept-Encoding":"gzip, deflate",
+#                 "Referer":"http://192.168.3.47/login_security.htm",
+#                 "Content-Type":"application/x-www-form-urlencoded",
+#                 "Content-Length":"196",
+#                 "Connection":"close",
+#                 "Upgrade-Insecure-Requests":"1"}
 
-    url = 'http://192.168.3.47/Forms/login_security_1'
+#     url = 'http://192.168.3.47/Forms/login_security_1'
 
-    while(True):
-        try:
-            r = requests.post(url,data=payload,headers=headers, allow_redirects=True)
-        except:
-            print("\n ERROR::>>FAILED TO ESTABLISH CONNECTION TO ROUTER\n")
+#     while(True):
+#         try:
+#             r = requests.post(url,data=payload,headers=headers, allow_redirects=True)
+#         except:
+#             print("\n ERROR::>>FAILED TO ESTABLISH CONNECTION TO ROUTER\n")
 
-        sleep(600)
+#         sleep(600)
 
 
 
@@ -98,9 +117,26 @@ def removeMac(parameters):
                 "Cookie":"C0=21232f297a57a5a743894a0e4a801fc3; C1=5f4dcc3b5aa765d61d8327deb882cf99",
                 "Upgrade-Insecure-Requests":"1"}
 
+    payload = {'tipsFlag':'0', 'timevalue':'0','Login_Name':'admin','uiWebLoginhiddenUsername':'21232f297a57a5a743894a0e4a801fc3','uiWebLoginhiddenPassword':'5f4dcc3b5aa765d61d8327deb882cf99'}
+    loginHeaders={"POST":"/Forms/login_security_1 HTTP/1.1",
+                "Host":"192.168.3.47",
+                "User-Agent":"Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101 Firefox/68.0",
+                "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                "Accept-Language":"en-US,en;q=0.5",
+                "Accept-Encoding":"gzip, deflate",
+                "Referer":"http://192.168.3.47/login_security.htm",
+                "Content-Type":"application/x-www-form-urlencoded",
+                "Content-Length":"196",
+                "Connection":"close",
+                "Upgrade-Insecure-Requests":"1"}
+
+    loginUrl = 'http://192.168.3.47/Forms/login_security_1'
+
     while(True):
         try:
-            r = requests.post(url,cookies=cookies,headers=headers, data=parameters, allow_redirects=True)
+            with requests.Session()  as s:
+                s.post(loginUrl,data=payload,headers=loginHeaders, allow_redirects=True)
+                s.post(url,cookies=cookies,headers=headers, data=parameters, allow_redirects=True)
 
             break
         except:
@@ -207,8 +243,8 @@ if __name__ == "__main__":
                 "SSIDCheckFlag":"0"
                 }
 
-    login = Process(target=login,args=[])
-    login.start()
+    # login = Process(target=login,args=[])
+    # login.start()
 
     passKey = Process(target=changePass,args=[parameters,activeUsers])
 
